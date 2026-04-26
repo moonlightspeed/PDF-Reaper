@@ -94,7 +94,7 @@ class PDFReaperApp(TkinterDnD_CTk):
 
             lbl_github = ctk.CTkLabel(icon_frame, text="", image=github_image, cursor="hand2")
             lbl_github.pack(side="left", padx=15)
-            lbl_github.bind("<Button-1>", lambda e: webbrowser.open("https://github.com/"))
+            lbl_github.bind("<Button-1>", lambda e: webbrowser.open("https://github.com/moonlightspeed/PDF-Reaper/"))
         except:
             pass
 
