@@ -1,3 +1,4 @@
+![App Screenshot](Screenshot.png)
 # PDF Reaper v1.0
 
 PDF Reaper is a high-performance desktop utility designed to convert web URLs and local HTML files into professional-grade PDF documents. It features an asynchronous rendering engine and multi-core compression for maximum efficiency.
