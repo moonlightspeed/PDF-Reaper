@@ -39,6 +39,37 @@ Launch the application:
 python main.py 
 ```
 
+## Technical Guides
+
+### 1. Handling Tree-Link Documentations (e.g., Unity Docs)
+To convert an entire documentation tree (like the Unity Manual) into one PDF, you need a list of all sub-page URLs. Instead of copying manually, use the browser **Console Inspect**:
+
+1. Open the documentation page (e.g., Unity Manual) in Chrome/Edge.
+2. Press `F12` or `Ctrl+Shift+I` to open **Developer Tools**.
+3. Go to the **Console** tab.
+4. Paste the following script and press `Enter` to extract all links from the sidebar/ToC:
+   ```javascript
+   // Example for standard sidebars
+   var links = [];
+   document.querySelectorAll('a').forEach(a => {
+       if (a.href.includes('Manual')) { // Filter keyword
+           links.push(a.href);
+       }
+   });
+   console.log(links.join('\n'));
+5. Copy the output list and use the Quick paste links button in PDF Reaper. 
+6. Enable Merge all files into one PDF to generate your offline manual.
+
+### 2. Chromium Engine Setup
+PDF Reaper requires the Chromium browser engine to render web pages.
+- For Developers:
+  After installing dependencies, run this command in your terminal:
+```bash
+playwright install chromium
+```
+- For End Users (Compiled version):
+If you are using the .exe version, the engine is usually bundled. If the app fails to render, ensure you have an active internet connection on the first run so it can verify the internal browser binaries.
+
 ### Build Executable
 To package the application for Windows:
 ```bash
