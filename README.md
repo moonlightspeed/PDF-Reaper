@@ -24,7 +24,7 @@ PDF Reaper is a high-performance desktop utility designed to convert web URLs an
 1. Clone the repository:
    ```bash
    git clone https://github.com/moonlightspeed/PDF-Reaper.git
-   cd PDF-Reaper
+   cd PDF-Reaper 
 2. Install dependencies:
     ```bash
     pip install -r requirements.txt
@@ -36,12 +36,14 @@ PDF Reaper is a high-performance desktop utility designed to convert web URLs an
 
 Launch the application:
 ```bash
-python main.py
+python main.py 
+```
 
 ### Build Executable
 To package the application for Windows:
 ```bash
 pyinstaller --noconfirm --onedir --windowed --add-data "pdf_engine.py;." --icon "reap.ico" --name "PDF_Reaper" --collect-all playwright main.py
+```
 
 ## Project Structure
 - main.py: GUI and application orchestration.
