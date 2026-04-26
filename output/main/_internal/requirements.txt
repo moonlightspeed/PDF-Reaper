@@ -1,5 +1,0 @@
-customtkinter
-playwright
-PyMuPDF
-Pillow
-tkinterdnd2
