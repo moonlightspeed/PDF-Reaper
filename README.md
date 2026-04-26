@@ -33,14 +33,15 @@ PDF Reaper is a high-performance desktop utility designed to convert web URLs an
     playwright install chromium
 
 ## Usage
+
 Launch the application:
 ```bash
-    python main.py
+python main.py
 
 ### Build Executable
 To package the application for Windows:
- ```bash
-    pyinstaller --noconfirm --onedir --windowed --add-data "pdf_engine.py;." --icon "reap.ico" --name "PDF_Reaper" --collect-all playwright main.py
+```bash
+pyinstaller --noconfirm --onedir --windowed --add-data "pdf_engine.py;." --icon "reap.ico" --name "PDF_Reaper" --collect-all playwright main.py
 
 ## Project Structure
 - main.py: GUI and application orchestration.
