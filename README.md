@@ -44,18 +44,17 @@ python main.py
 To convert an entire documentation tree (like the Unity Manual) into one PDF, you need a list of all sub-page URLs. Instead of copying manually, use the browser **Console Inspect**:
 
 1. Open the documentation page (e.g., Unity Manual) in your Chromium-based browser.
-2. Press `F12` or `Ctrl+Shift+I` to open **Developer Tools**.
+2. Open **Developer Tools**.
 3. Go to the **Console** tab.
-4. Paste the following script and press `Enter` to extract all links from the sidebar/ToC:
+4. Paste the following script. **Important:** Change the `'/docs/2.03/studio/'` part to match the specific URL path of the documentation you are targeting (e.g., `'Manual'` for Unity).
    ```javascript
-   // Example for standard sidebars
-   var links = [];
-   document.querySelectorAll('a').forEach(a => {
-       if (a.href.includes('Manual')) { // Filter keyword
-           links.push(a.href);
-       }
-   });
+   var links = [...new Set(
+       Array.from(document.querySelectorAll('a'))
+       .map(a => a.href.split('#')[0]) // Remove anchor tags to prevent page duplication
+       .filter(href => href.includes('/docs/2.03/studio/') && href.endsWith('.html')) // <-- CHANGE KEYWORD HERE
+   )];
    console.log(links.join('\n'));
+   ```
 5. Copy the output list and use the Quick paste links button in PDF Reaper. 
 6. Enable Merge all files into one PDF to generate your offline manual.
 
