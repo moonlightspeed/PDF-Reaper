@@ -90,4 +90,4 @@ pyinstaller --noconfirm --onedir --windowed --add-data "pdf_engine.py;." --icon 
 - Compression: Level 0 provides lossless output, while higher levels apply structural cleaning and stream deflation.
 
 ## License
-Distributed under the MIT License.
+Distributed under the GNU License. Please read the License file.
