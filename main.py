@@ -366,25 +366,12 @@ class PDFReaperApp(TkinterDnD_CTk):
                 messagebox.showerror("Error", "Output destination not set!")
                 return
 
-            self.app_state['is_running'] = True
-            self.app_state['is_paused'] = False
-            self.app_state['is_cancelled'] = False
-            self.btn_convert.configure(text="Pause", fg_color="#1f538d", hover_color="#14375e") 
-            self.update_button_states()
-            self.update_progress(0)
-            self.log("\n=== EXECUTION STARTED ===")
-            
-            options = {
-                'merge': self.var_merge.get(),
-                'split': self.var_split.get(),
-                'split_pages': int(self.entry_split.get() or 0) if self.var_split.get() else 0,
-                'compression': self.comp_map[int(self.slider_comp.get())],
-                'max_cpu': self.var_max_cpu.get()
-            }
-            out_dir = self.entry_out.get()
-            
-            threading.Thread(target=self.run_engine_thread, args=(self.source_list.copy(), out_dir, options), daemon=True).start()
-            
+            if self.app_state.get('browser_ready', False):
+                self.start_conversion_logic()
+            else:
+                self.app_state['is_running'] = True
+                self.update_button_states()
+                threading.Thread(target=self.check_and_install_browsers, daemon=True).start()
         else:
             self.app_state['is_paused'] = not self.app_state['is_paused']
             if self.app_state['is_paused']:
@@ -393,6 +380,69 @@ class PDFReaperApp(TkinterDnD_CTk):
             else:
                 self.log("\n[SYSTEM] Execution resumed.")
                 self.btn_convert.configure(text="Pause", fg_color="#1f538d")
+
+    def check_and_install_browsers(self):
+        try:
+            self.log("[SYSTEM] Verifying browser engine...")
+            
+            from playwright.sync_api import sync_playwright
+            missing = False
+            try:
+                with sync_playwright() as p:
+                    browser_path = p.chromium.executable_path
+                    if not os.path.exists(browser_path):
+                        missing = True
+            except Exception:
+                missing = True
+
+            if missing:
+                self.safe_update_ui(self._prompt_for_download)
+            else:
+                self.app_state['browser_ready'] = True
+                self.safe_update_ui(self.start_conversion_logic)
+                
+        except Exception as e:
+            self.log(f"[FATAL] Browser verification failed: {e}")
+            self.safe_update_ui(self.reset_ui)
+
+    def _prompt_for_download(self):
+        if messagebox.askyesno("Browser Missing", "Chromium engine is required but not found. Download it now? (Approx. 100-150MB)"):
+            self.log("[SYSTEM] Downloading Chromium... Please wait.")
+            threading.Thread(target=self._download_browser_thread, daemon=True).start()
+        else:
+            self.log("[ERROR] Execution aborted: Browser engine missing.")
+            self.reset_ui()
+
+    def _download_browser_thread(self):
+        import subprocess
+        try:
+            subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=True)
+            self.log("[SYSTEM] Chromium installed successfully.")
+            self.app_state['browser_ready'] = True
+            self.safe_update_ui(self.start_conversion_logic)
+        except Exception as e:
+            self.log(f"[ERROR] Failed to download Chromium: {e}")
+            self.safe_update_ui(self.reset_ui)
+
+    def start_conversion_logic(self):
+        self.app_state['is_running'] = True
+        self.app_state['is_paused'] = False
+        self.app_state['is_cancelled'] = False
+        self.btn_convert.configure(text="Pause", fg_color="#1f538d", hover_color="#14375e") 
+        self.update_button_states()
+        self.update_progress(0)
+        self.log("\n=== EXECUTION STARTED ===")
+        
+        options = {
+            'merge': self.var_merge.get(),
+            'split': self.var_split.get(),
+            'split_pages': int(self.entry_split.get() or 0) if self.var_split.get() else 0,
+            'compression': self.comp_map[int(self.slider_comp.get())],
+            'max_cpu': self.var_max_cpu.get()
+        }
+        out_dir = self.entry_out.get()
+        
+        threading.Thread(target=self.run_engine_thread, args=(self.source_list.copy(), out_dir, options), daemon=True).start()
 
     def run_engine_thread(self, sources, out_dir, options):
         engine = PDFEngine(self.app_state, self.log, self.update_progress)

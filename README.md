@@ -1,18 +1,17 @@
 ![App Screenshot](Screenshot.png)
 # PDF Reaper v1.0
 
-PDF Reaper is a high-performance desktop utility designed to convert web URLs and local HTML files into professional-grade PDF documents. It features an asynchronous rendering engine and multi-core compression for maximum efficiency.
+PDF Reaper is a high-performance desktop utility designed to convert web URLs and local HTML files into professional-grade PDF documents.
 
 ## Features
 
-- **Async Rendering**: Uses Playwright to handle JavaScript-heavy pages, lazy-loading content, and automatic cookie banner removal.
-- **Parallel Processing**: Multi-threaded execution allows for simultaneous rendering of multiple sources.
-- **Advanced Compression**: Utilizes the PyMuPDF engine for variable compression levels (0-100%) to optimize file size.
-- **Workflow Options**:
-    - **Merge**: Combine multiple sources into a single PDF document.
-    - **Split**: Automatically paginate large documents into equal parts.
-    - **Quick Compress**: Dedicated engine for optimizing existing PDF files on disk.
-- **Modern Interface**: Built with CustomTkinter for a native dark-mode experience with Drag & Drop support.
+- **Async Rendering**: Powered by Playwright to handle JS-heavy pages and automatic cookie banner suppression.
+- **Parallel Processing**: Multi-threaded execution to render and compress multiple sources simultaneously.
+- **Advanced Compression**: Variable compression levels (0-100%) using the PyMuPDF engine.
+- **Smart Workflow**:
+    - **Merge**: Combine multiple sources into a single unified PDF.
+    - **Split**: Automatically paginate large documents into equal chunks.
+    - **Preserve Filenames**: Output files maintain their original HTML/URL titles.
 
 ## Installation
 
@@ -44,7 +43,7 @@ python main.py
 ### 1. Handling Tree-Link Documentations (e.g., Unity Docs)
 To convert an entire documentation tree (like the Unity Manual) into one PDF, you need a list of all sub-page URLs. Instead of copying manually, use the browser **Console Inspect**:
 
-1. Open the documentation page (e.g., Unity Manual) in Chrome/Edge.
+1. Open the documentation page (e.g., Unity Manual) in your Chromium-based browser.
 2. Press `F12` or `Ctrl+Shift+I` to open **Developer Tools**.
 3. Go to the **Console** tab.
 4. Paste the following script and press `Enter` to extract all links from the sidebar/ToC:
@@ -61,14 +60,17 @@ To convert an entire documentation tree (like the Unity Manual) into one PDF, yo
 6. Enable Merge all files into one PDF to generate your offline manual.
 
 ### 2. Chromium Engine Setup
-PDF Reaper requires the Chromium browser engine to render web pages.
+The app requires the Chromium browser binaries to function.
 - For Developers:
   After installing dependencies, run this command in your terminal:
 ```bash
 playwright install chromium
 ```
 - For End Users (Compiled version):
-If you are using the .exe version, the engine is usually bundled. If the app fails to render, ensure you have an active internet connection on the first run so it can verify the internal browser binaries.
+The app will prompt you to download Chromium on the first execution if it is missing. If the automated process fails, run the command below in terminal:
+```bash
+playwright install chromium
+```
 
 ### Build Executable
 To package the application for Windows:
