@@ -13,7 +13,7 @@ import ctypes
 from pdf_engine import PDFEngine
 
 try:
-    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("pdfreaper.v1.0")
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("pdfreaper.v1.1")
 except:
     pass
 
@@ -35,7 +35,7 @@ class TkinterDnD_CTk(ctk.CTk, TkinterDnD.DnDWrapper if HAS_DND else object):
 class PDFReaperApp(TkinterDnD_CTk):
     def __init__(self):
         super().__init__()
-        self.title("PDF REAPER v1.0")
+        self.title("PDF REAPER v1.1")
         self.geometry("1050x850")
         
         self.base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
@@ -66,7 +66,7 @@ class PDFReaperApp(TkinterDnD_CTk):
         self.sidebar.grid(row=0, column=0, sticky="nsew")
         
         ctk.CTkLabel(self.sidebar, text="PDF REAPER", font=("Arial", 22, "bold"), text_color="white").pack(pady=(30, 0))
-        ctk.CTkLabel(self.sidebar, text="Version 1.0", font=("Arial", 12, "italic"), text_color="#aaaaaa").pack(pady=(0, 10))
+        ctk.CTkLabel(self.sidebar, text="Version 1.1", font=("Arial", 12, "italic"), text_color="#aaaaaa").pack(pady=(0, 10))
         
         btn_container = ctk.CTkFrame(self.sidebar, fg_color="transparent")
         btn_container.pack(expand=True, fill="both", pady=20)
