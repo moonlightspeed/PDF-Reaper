@@ -1,5 +1,6 @@
 import os
 import sys
+os.environ["PLAYWRIGHT_BROWSERS_PATH"] = os.path.join(os.path.expanduser("~"), "AppData", "Local", "PDFReaper_Browser")
 import threading
 import asyncio
 import webbrowser
@@ -414,9 +415,21 @@ class PDFReaperApp(TkinterDnD_CTk):
             self.reset_ui()
 
     def _download_browser_thread(self):
-        import subprocess
         try:
-            subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=True)
+            import subprocess
+            from playwright._impl._driver import compute_driver_executable, get_driver_env
+            
+            self.log("[SYSTEM] Connecting to Playwright internal driver...")
+            
+            # Hàm này trả về 2 giá trị: file chạy (node) và file lệnh (cli)
+            driver_executable, driver_cli = compute_driver_executable()
+            env = get_driver_env()
+            
+            self.log("[SYSTEM] Downloading Chromium... This may take a while.")
+            
+            # Phải truyền đủ cả file chạy và file lệnh vào list cho subprocess
+            subprocess.run([driver_executable, driver_cli, "install", "chromium"], env=env, check=True)
+            
             self.log("[SYSTEM] Chromium installed successfully.")
             self.app_state['browser_ready'] = True
             self.safe_update_ui(self.start_conversion_logic)
